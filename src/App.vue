@@ -14,6 +14,10 @@ import BoxWord from './components/BoxWord.vue';
 <style>
 @import './assets/base.css';
 
+body {
+  background: var(--vt-c-white);
+}
+
 .title {
   width: 100%;
   margin-top: 10rem;
