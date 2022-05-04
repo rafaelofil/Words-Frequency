@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import BoxWord from './components/BoxWord.vue';
-
 </script>
 
 <template>
   <h1 class="title">Word Frequency</h1>
 
-  <div>
+  <div >
     <BoxWord />
   </div>
 </template>
