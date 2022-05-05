@@ -46,7 +46,7 @@
 
 <template>
 	<div class="container-text">
-		<textarea id="text" name="text" rows="10" v-model="text" v-on:keyup="count()"></textarea>
+		<textarea id="text" name="text" rows="10" v-model="text" v-on:keydown="count()"></textarea>
 		<div>
 			<select name="order" id="order" v-model="order" v-on:click="splitWords()">
         <option>Alphabetic Order</option>
@@ -116,10 +116,18 @@
 
 .container-table {
   width: 350px;
+
+  border: 2px solid;
+  border-collapse: collapse;
 }
 
 .container-table table,td {
-    border: 2px solid var(--vt-c-black-soft);
+  border: 2px solid var(--vt-c-black-soft);
+}
+
+.container-table td {
+  width: 50%;
+  text-align: center;
 }
 
 .container-table thead {
