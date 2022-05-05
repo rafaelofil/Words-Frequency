@@ -1,36 +1,35 @@
 <script setup lang="ts">
-  import { reactive, ref } from 'vue';
+  import { ref } from 'vue';
 
   let text = ref("");
   let order = ref("Alphabetic Order");
   let words: Array<string> = [];
-  let wordsFrequency: { name: string; number: number; }[] =  [];
+  let wordsFrequency: { word: string; frequency: number; }[] =  [];
   let i = 0;
-
 
   function splitWords() : void {
     words = text.value.toLowerCase().split(/[^A-ZÀ-ź]/gi).filter((item : string) => item != "").sort();
   }
 
   function countWords() : void {
-    wordsFrequency = [];
     i = 1;
 
     wordsFrequency[0] = {
-      name: words[0],
-      number: 1,
+      word: words[0],
+      frequency: 1,
     };
 
     words.reduce((previousItem, actualItem) => {
       if (previousItem === actualItem) {
-        wordsFrequency[i - 1].number++;
+        wordsFrequency[i - 1].frequency++;
         return previousItem;
       } else {
         wordsFrequency[i] = {
-        name: actualItem,
-        number: 1,
+        word: actualItem,
+        frequency: 1,
       };
         i++;
+        
         return actualItem;
       }
     });
@@ -47,7 +46,7 @@
 
 <template>
 	<div class="container-text">
-		<textarea id="text" name="text" rows="10" v-model="text"></textarea>
+		<textarea id="text" name="text" rows="10" v-model="text" v-on:keyup="count()"></textarea>
 		<div>
 			<select name="order" id="order" v-model="order" v-on:click="splitWords()">
         <option>Alphabetic Order</option>
@@ -55,6 +54,18 @@
         <option>Descending Order</option>
       </select>
 		</div>
+    <table class="container-table">
+      <thead>
+        <th>Words</th>
+        <th>Frenquency</th>
+      </thead>
+      <tbody>
+        <tr v-for="{word, frequency} in wordsFrequency" :key="word">
+          <td>{{ word }}</td>
+          <td>{{ frequency }}</td>
+        </tr>
+      </tbody>
+    </table>
 	</div>
 </template>
 
@@ -68,7 +79,7 @@
 	flex-direction: column;
 }
 
-.container-text div {
+.container-text > div {
 	margin: 0.5rem;
 
 	width: 350px;
@@ -98,9 +109,23 @@
 #text {
 	border: 2px solid #000;
 	border-radius: 4px;
-	width: 350px;
+	width: 30%;
 
   resize: none;
+}
+
+.container-table {
+  width: 350px;
+}
+
+.container-table table,td {
+    border: 2px solid var(--vt-c-black-soft);
+}
+
+.container-table thead {
+  background: var(--vt-c-black-mute);
+  color: var(--vt-c-white);
+  justify-content: space-around;
 }
 
 </style>
