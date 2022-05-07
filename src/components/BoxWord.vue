@@ -47,7 +47,7 @@
         <option>Descending Order</option>
       </select>
 		</div>
-    <table class="container-table">
+    <table class="container-table" v-if="words.length > 0">
       <thead>
         <th>Words</th>
         <th>Frenquency</th>
