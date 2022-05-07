@@ -1,22 +1,25 @@
 <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
+  import type { Ref, ComputedRef} from 'vue';
 
-  let text = ref<string>("");
-  let wordsFrequency = ref([{word: "", frequency: 0}]);
+  let text: Ref<string> = ref<string>("");
+  let wordsFrequency: Ref<{word: string, frequency: number}[]> = ref([{word: "", frequency: 0}]);
+  let order: Ref<string> = ref("Alphabetic Order");
 
-  const words = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
+  const words: ComputedRef<string[]> = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
   
  function countWords() {
     wordsFrequency.value = [];
     let i = 1;
 
-    wordsFrequency.value[0] = {
-      word: words.value[0],
-      frequency: 1,
-    };
+    if(words.value.length > 0){
+      wordsFrequency.value[0] = {
+        word: words.value[0],
+        frequency: 1,
+      };
 
-    if(words.value.length > 0)
-      howManyWordsRepeat(i)
+      howManyWordsRepeat(i);
+    }
   }
 
   function howManyWordsRepeat(i: number) {
@@ -35,18 +38,36 @@
     });
   }
 
+  function orderWords(order: string) {
+    switch (order) {
+      case "Alphabetic Order":
+        wordsFrequency.value.sort((a, b) => (a.word > b.word ? 1 : -1));
+        break;
+      case "Ascending Order":
+        wordsFrequency.value.sort((a, b) => a.frequency - b.frequency);
+        break;
+      case "Descending Order":
+        wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
+        break;
+      default:
+        wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
+      }
+  }
+
+  watch(order, (newOrder) => orderWords(newOrder));
 </script>
 
 <template>
 	<div class="container-text">
 		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords"></textarea>
-		<div>
-			<select name="order" id="order">
-        <option>Alphabetic Order</option>
+
+    <div>
+      <select name="order" id="order" v-model="order">
+        <option selected>Alphabetic Order</option>
         <option>Ascending Order</option>
         <option>Descending Order</option>
       </select>
-		</div>
+    </div>
     <table class="container-table" v-if="words.length > 0">
       <thead>
         <th>Words</th>
