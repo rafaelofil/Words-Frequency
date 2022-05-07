@@ -1,54 +1,47 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
 
-  let text = ref("");
-  let order = ref("Alphabetic Order");
-  let words: Array<string> = [];
-  let wordsFrequency: { word: string; frequency: number; }[] =  [];
-  let i = 0;
+  let text = ref<string>("");
+  let wordsFrequency = ref([{word: "", frequency: 0}]);
 
-  function splitWords() : void {
-    words = text.value.toLowerCase().split(/[^A-ZÀ-ź]/gi).filter((item : string) => item != "").sort();
-  }
+  const words = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
+  
+ function countWords() {
+    wordsFrequency.value = [];
+    let i = 1;
 
-  function countWords() : void {
-    i = 1;
-
-    wordsFrequency[0] = {
-      word: words[0],
+    wordsFrequency.value[0] = {
+      word: words.value[0],
       frequency: 1,
     };
 
-    words.reduce((previousItem, actualItem) => {
+    if(words.value.length > 0)
+      howManyWordsRepeat(i)
+  }
+
+  function howManyWordsRepeat(i: number) {
+      words.value.reduce((previousItem, actualItem) => {
       if (previousItem === actualItem) {
-        wordsFrequency[i - 1].frequency++;
+        wordsFrequency.value[i - 1].frequency++;
         return previousItem;
       } else {
-        wordsFrequency[i] = {
+        wordsFrequency.value[i] = {
         word: actualItem,
         frequency: 1,
       };
         i++;
-        
         return actualItem;
       }
     });
   }
 
-  function count() : void {
-    if (text.value.trim().length !== 0) {
-      splitWords();
-      countWords();
-    }
-  }
-  
 </script>
 
 <template>
 	<div class="container-text">
-		<textarea id="text" name="text" rows="10" v-model="text" v-on:keydown="count()"></textarea>
+		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords"></textarea>
 		<div>
-			<select name="order" id="order" v-model="order" v-on:click="splitWords()">
+			<select name="order" id="order">
         <option>Alphabetic Order</option>
         <option>Ascending Order</option>
         <option>Descending Order</option>
