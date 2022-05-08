@@ -8,8 +8,10 @@
 
   const words: ComputedRef<string[]> = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
   
+  watch(order, (newOrder) => orderWords(newOrder));
+   
  function countWords() {
-    wordsFrequency.value = [];
+   wordsFrequency.value = [];
     let i = 1;
 
     if(words.value.length > 0){
@@ -23,7 +25,7 @@
   }
 
   function howManyWordsRepeat(i: number) {
-      words.value.reduce((previousItem, actualItem) => {
+    words.value.reduce((previousItem, actualItem) => {
       if (previousItem === actualItem) {
         wordsFrequency.value[i - 1].frequency++;
         return previousItem;
@@ -54,7 +56,6 @@
       }
   }
 
-  watch(order, (newOrder) => orderWords(newOrder));
 </script>
 
 <template>

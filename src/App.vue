@@ -24,6 +24,8 @@ body {
 
   display: flex;
   justify-content: center;
+
+  color: var(--vt-c-black);
 }
 
 </style>
