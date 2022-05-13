@@ -28,4 +28,12 @@ body {
   color: var(--vt-c-black);
 }
 
+@media (max-width: 400px) {
+  .title {
+    font-size: 2rem;
+    line-height: 1;
+
+    margin-top: 1rem;
+  }
+}
 </style>

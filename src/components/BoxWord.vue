@@ -7,9 +7,7 @@
   let order: Ref<string> = ref("Alphabetic Order");
 
   const words: ComputedRef<string[]> = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
-  
-  // watch(order, (newOrder) => orderWords(newOrder));
-   
+     
  function countWords() {
    wordsFrequency.value = [];
     let i = 1;
@@ -61,6 +59,7 @@
 
 <template>
 	<div class="container-text">
+
 		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords" placeholder="Write your text here ;)"></textarea>
 
     <div>
@@ -70,6 +69,7 @@
         <option>Descending Order</option>
       </select>
     </div>
+
     <table class="container-table" v-if="words.length > 0">
       <thead>
         <th>Words</th>
@@ -82,6 +82,7 @@
         </tr>
       </tbody>
     </table>
+
 	</div>
 </template>
 
@@ -116,10 +117,6 @@
   background: var(--color-background);
   border: 2px solid var(--color-border);
   border-radius: 4px;
-}
-
-#order option {
-  cursor: pointer;
 }
 
 #text {
@@ -157,6 +154,32 @@
   background: var(--color-background-mute);
   color: var(--color-heading);
   justify-content: space-around;
+}
+
+@media (max-width: 1185px) {
+  #text {
+    width: 350px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container-text {
+    padding: 0.5rem;
+  }
+
+  .container-text > div {
+    margin: 0rem;
+    width: 100%;
+  }
+
+  .container-table, #text {
+    width: 100%;
+  }
+
+  #order {
+    margin: 0.5rem 0;
+    padding: 0rem;
+  }
 }
 
 </style>
