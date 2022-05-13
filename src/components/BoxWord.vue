@@ -8,7 +8,7 @@
 
   const words: ComputedRef<string[]> = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
   
-  watch(order, (newOrder) => orderWords(newOrder));
+  // watch(order, (newOrder) => orderWords(newOrder));
    
  function countWords() {
    wordsFrequency.value = [];
@@ -22,6 +22,8 @@
 
       howManyWordsRepeat(i);
     }
+
+    orderWords(order);
   }
 
   function howManyWordsRepeat(i: number) {
@@ -41,7 +43,7 @@
   }
 
   function orderWords(order: string) {
-    switch (order) {
+    switch (order.value || order) {
       case "Alphabetic Order":
         wordsFrequency.value.sort((a, b) => (a.word > b.word ? 1 : -1));
         break;
@@ -55,15 +57,14 @@
         wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
       }
   }
-
 </script>
 
 <template>
 	<div class="container-text">
-		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords"></textarea>
+		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords" placeholder="Write your text here ;)"></textarea>
 
     <div>
-      <select name="order" id="order" v-model="order">
+      <select name="order" id="order" v-model="order" @change="orderWords(order)">
         <option selected>Alphabetic Order</option>
         <option>Ascending Order</option>
         <option>Descending Order</option>
@@ -109,11 +110,11 @@
   width: 165px;
   padding: 0.25rem 0rem;
 
-  color: var(--vt-c-white);
+  color: var(--color-heading);
   font-size: 1rem;
 
-  background: var(--vt-c-black-mute);
-  border: 2px solid var(--vt-c-black);
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
   border-radius: 4px;
 }
 
@@ -125,8 +126,13 @@
 	border: 2px solid #000;
 	border-radius: 4px;
 	width: 30%;
+  padding-left: 0.5rem;
 
   resize: none;
+  outline: none;
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+  Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 
 .container-table {
@@ -137,17 +143,19 @@
 }
 
 .container-table table,td {
-  border: 2px solid var(--vt-c-black-soft);
+  border: 2px solid var(--color-border);
 }
 
 .container-table td {
   width: 50%;
   text-align: center;
+
+  color: var(--color-text);
 }
 
 .container-table thead {
-  background: var(--vt-c-black-mute);
-  color: var(--vt-c-white);
+  background: var(--color-background-mute);
+  color: var(--color-heading);
   justify-content: space-around;
 }
 
