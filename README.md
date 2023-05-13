@@ -1,6 +1,6 @@
 # Words-Frequency
 
-Project to count words to type on text area and generate a table showing the most repeat words. The intuite of these project is help people (like me) undestand how many time one word repeat in the text for improve vocabulary :)
+Project to count words typed on text area and generate a table showing the most repeat words. The intention of this project is help people (like me) understand how many time one word repeat in the text for improve vocabulary :)
 
 ## Technology
 TypeScript | Vite | Vue3 | NPM
