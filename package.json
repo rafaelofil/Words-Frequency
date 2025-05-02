@@ -2,9 +2,10 @@
   "name": "words-frequency",
   "version": "0.0.0",
   "homepage": "https://rafaelofil.github.io/Words-Frenquecy/",
+  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "VITE_CJS_TRACE=true vue-tsc --noEmit && vite build",
     "preview": "vite preview --port 5050",
     "typecheck": "vue-tsc --noEmit",
     "predeploy": "npm run build",

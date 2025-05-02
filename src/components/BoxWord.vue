@@ -1,69 +1,87 @@
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue';
-  import type { Ref, ComputedRef} from 'vue';
+import { computed, ref, watch } from "vue";
+import type { Ref, ComputedRef } from "vue";
 
-  let text: Ref<string> = ref<string>("");
-  let wordsFrequency: Ref<{word: string, frequency: number}[]> = ref([{word: "", frequency: 0}]);
-  let order: Ref<string> = ref("Alphabetic Order");
+let text: Ref<string> = ref<string>("");
+let wordsFrequency: Ref<{ word: string; frequency: number }[]> = ref([
+  { word: "", frequency: 0 },
+]);
+const order: Ref<string> = ref("Alphabetic Order");
 
-  const words: ComputedRef<string[]> = computed(() => text.value.split(/[^A-ZÀ-ź]/gi).filter((item) => item != "").sort());
-     
- function countWords() {
-   wordsFrequency.value = [];
-    let i = 1;
+const words: ComputedRef<string[]> = computed(() =>
+  text.value
+    .split(/[^A-ZÀ-ź]/gi)
+    .filter((item) => item != "")
+    .sort(),
+);
 
-    if(words.value.length > 0){
-      wordsFrequency.value[0] = {
-        word: words.value[0],
-        frequency: 1,
-      };
+function countWords() {
+  wordsFrequency.value = [];
+  let i = 1;
 
-      howManyWordsRepeat(i);
-    }
+  if (words.value.length > 0) {
+    wordsFrequency.value[0] = {
+      word: words.value[0],
+      frequency: 1,
+    };
 
-    orderWords(order);
+    howManyWordsRepeat(i);
   }
 
-  function howManyWordsRepeat(i: number) {
-    words.value.reduce((previousItem, actualItem) => {
-      if (previousItem === actualItem) {
-        wordsFrequency.value[i - 1].frequency++;
-        return previousItem;
-      } else {
-        wordsFrequency.value[i] = {
+  orderWords(order.value);
+}
+
+function howManyWordsRepeat(i: number) {
+  words.value.reduce((previousItem, actualItem) => {
+    if (previousItem === actualItem) {
+      wordsFrequency.value[i - 1].frequency++;
+      return previousItem;
+    } else {
+      wordsFrequency.value[i] = {
         word: actualItem,
         frequency: 1,
       };
-        i++;
-        return actualItem;
-      }
-    });
-  }
+      i++;
+      return actualItem;
+    }
+  });
+}
 
-  function orderWords(order: string) {
-    switch (order.value || order) {
-      case "Alphabetic Order":
-        wordsFrequency.value.sort((a, b) => (a.word > b.word ? 1 : -1));
-        break;
-      case "Ascending Order":
-        wordsFrequency.value.sort((a, b) => a.frequency - b.frequency);
-        break;
-      case "Descending Order":
-        wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
-        break;
-      default:
-        wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
-      }
+function orderWords(order: string) {
+  switch (order) {
+    case "Alphabetic Order":
+      wordsFrequency.value.sort((a, b) => (a.word > b.word ? 1 : -1));
+      break;
+    case "Ascending Order":
+      wordsFrequency.value.sort((a, b) => a.frequency - b.frequency);
+      break;
+    case "Descending Order":
+      wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
+      break;
+    default:
+      wordsFrequency.value.sort((a, b) => b.frequency - a.frequency);
   }
+}
 </script>
 
 <template>
-	<div class="container-text">
-
-		<textarea id="text" name="text" rows="10" v-model="text" @keyup="countWords" placeholder="Write your text here ;)"></textarea>
+  <div class="container-text">
+    <textarea
+      id="text"
+      name="text"
+      rows="10"
+      v-model="text"
+      @keyup="countWords"
+      placeholder="Write your text here ;)"
+    ></textarea>
 
     <div>
-      <select name="order" id="order" v-model="order" @change="orderWords(order)">
+      <select
+        name="order"
+        id="order"
+        v-model="order"
+        @change="orderWords(order)"
+      >
         <option selected>Alphabetic Order</option>
         <option>Ascending Order</option>
         <option>Descending Order</option>
@@ -76,33 +94,32 @@
         <th>Frenquency</th>
       </thead>
       <tbody>
-        <tr v-for="{word, frequency} in wordsFrequency" :key="word">
+        <tr v-for="{ word, frequency } in wordsFrequency" :key="word">
           <td>{{ word }}</td>
           <td>{{ frequency }}</td>
         </tr>
       </tbody>
     </table>
-
-	</div>
+  </div>
 </template>
 
 <style>
 .container-text {
-	width: 100%;
+  width: 100%;
 
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .container-text > div {
-	margin: 0.5rem;
+  margin: 0.5rem;
 
-	width: 350px;
+  width: 350px;
 
-	display: flex;
-	justify-content: flex-start;
+  display: flex;
+  justify-content: flex-start;
 }
 
 #order {
@@ -120,16 +137,27 @@
 }
 
 #text {
-	border: 2px solid #000;
-	border-radius: 4px;
-	width: 30%;
+  border: 2px solid #000;
+  border-radius: 4px;
+  width: 30%;
   padding-left: 0.5rem;
 
   resize: none;
   outline: none;
 
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
-  Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Fira Sans",
+    "Droid Sans",
+    "Helvetica Neue",
+    sans-serif;
 }
 
 .container-table {
@@ -139,7 +167,8 @@
   border-collapse: collapse;
 }
 
-.container-table table,td {
+.container-table table,
+td {
   border: 2px solid var(--color-border);
 }
 
@@ -172,7 +201,8 @@
     width: 100%;
   }
 
-  .container-table, #text {
+  .container-table,
+  #text {
     width: 100%;
   }
 
@@ -181,5 +211,4 @@
     padding: 0rem;
   }
 }
-
 </style>
